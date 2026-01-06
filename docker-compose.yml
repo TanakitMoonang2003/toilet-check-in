@@ -1,0 +1,66 @@
+services:
+  frontend:
+    build: ./frontend 
+    container_name: frontend
+    ports:
+      - "3000:3000"  
+    depends_on:
+      - backend
+    restart: always
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=mysql-server
+      - DB_PORT=3306
+      - DB_USER=admin
+      - DB_PASS=admin
+      - DB_NAME=toilet
+      - CLIENT=${CLIENT}
+      - FACEBOOK_CLIENT_ID=${FACEBOOK_CLIENT_ID}
+      - FACEBOOK_CLIENT_SECRET=${FACEBOOK_CLIENT_SECRET}
+      - FACEBOOK_CALLBACK_URL=${FACEBOOK_CALLBACK_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_CALLBACK_URL=${GOOGLE_CALLBACK_URL}
+      - SECRET=${SECRET}
+    depends_on:
+      - mysql-server
+    volumes:
+      - ./backend:/app
+      - ./backend/public/images:/app/public/images
+    restart: always
+
+  mysql-server:
+    image: mysql:latest
+    container_name: mysql-server
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: toilet
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql-server
+      PMA_PORT: 3306
+      PMA_USER: admin
+      PMA_PASSWORD: admin
+    depends_on:
+      - mysql-server
+
+volumes:
+  mysql_data:
+    driver: local
