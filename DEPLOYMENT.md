@@ -160,7 +160,7 @@ NEXT_PUBLIC_API_URL=https://your-backend-url.railway.app
 #### 6.1 Facebook Developer Console
 
 1. ไปที่ https://developers.facebook.com/apps
-2. เลือก App ของคุณ (App ID: 3788059758004280)
+2. เลือก App ของคุณ
 3. ไปที่ **Settings** → **Basic**
 4. ในส่วน **App Domains** เพิ่ม:
    ```
